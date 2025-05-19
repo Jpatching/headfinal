@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useRef } from "react"
 import { Card } from "@/components/ui/card"
-import { Trophy, Refresh } from "lucide-react"
+import { RefreshCw } from "lucide-react"
+import { Trophy } from "lucide-react"
 import GameText from "@/components/game-text"
 import { getLeaderboard } from "@/lib/redis"
 import { Button } from "@/components/ui/button"
@@ -31,7 +32,6 @@ export default function Leaderboard({
   
   // Reference to the SSE connection
   const eventSourceRef = useRef<EventSource | null>(null)
-
   // Function to fetch leaderboard data
   const fetchLeaderboardData = async () => {
     try {
@@ -82,8 +82,7 @@ export default function Leaderboard({
     if (autoRefresh) {
       refreshInterval = setInterval(fetchLeaderboardData, 10000) // Refresh every 10 seconds
     }
-    
-    // Try to set up SSE (Server-Sent Events) for real-time updates
+      // Try to set up SSE (Server-Sent Events) for real-time updates
     const setupSSE = () => {
       try {
         // Close any existing connection
@@ -111,6 +110,7 @@ export default function Leaderboard({
           // On error, close connection and fall back to polling
           source.close()
           eventSourceRef.current = null
+          console.log('SSE connection failed, falling back to polling')
         }
       } catch (error) {
         console.error('Error setting up SSE:', error)
@@ -167,8 +167,7 @@ export default function Leaderboard({
           size="sm"
           className="bg-transparent border border-yellow-400 hover:bg-yellow-400 hover:text-blue-900"
           onClick={handleRefresh}
-        >
-          <Refresh className="h-4 w-4 mr-1" />
+        >          <RefreshCw className="h-4 w-4 mr-1" />
           <span className="text-xs">Refresh</span>
         </Button>
       </div>
