@@ -29,9 +29,9 @@ const redis = getRedisClient();
 // Function to update a player's position on the leaderboard
 export async function updateLeaderboard(playerId, score, type = 'winnings') {
   try {
-    const leaderboardKey = `leaderboard:${type}`;
+    const leaderboardKeyName = `leaderboard:${type}`;
     // The correct format for Upstash Redis zadd
-    return await redis.zadd(leaderboardKey, { [playerId]: score });
+    return await redis.zadd(leaderboardKeyName, { [playerId]: score });
   } catch (error) {
     console.error('Error updating leaderboard:', error);
     return false;
@@ -41,9 +41,9 @@ export async function updateLeaderboard(playerId, score, type = 'winnings') {
 // Function to get top players from leaderboard
 export async function getLeaderboard(type = 'winnings', limit = 10) {
   try {
-    const leaderboardKey = `leaderboard:${type}`;
+    const leaderboardKeyName = `leaderboard:${type}`;
     // Get the top players by score (descending order)
-    const results = await redis.zrange(leaderboardKey, 0, limit - 1, { withScores: true, rev: true });
+    const results = await redis.zrange(leaderboardKeyName, 0, limit - 1, { withScores: true, rev: true });
     
     // Format the results
     return results.map((item, index) => {
