@@ -24,10 +24,18 @@ export function getPendingMatchesByAmountKey(amount: number) {
 // Initialize Upstash KV client with REST API
 console.log("Initializing Upstash KV client via Vercel integration");
 
+// Check if environment variables are set
+const redisUrl = process.env.UPSTASH_REDIS_KV_REST_API_URL;
+const redisToken = process.env.UPSTASH_REDIS_KV_REST_API_TOKEN;
+
+// Fallback values for local development (don't use in production)
+const fallbackUrl = "https://intimate-cowbird-32452.upstash.io";
+const fallbackToken = "AX7EAAIjcDFmOTIyN2UzNDAwM2I0MjBhOWU0NjMwODJjMTEzZmNhZXAxMA";
+
 // Create the Redis client from Upstash KV REST API
 export const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_KV_REST_API_URL || "https://intimate-cowbird-32452.upstash.io",
-  token: process.env.UPSTASH_REDIS_KV_REST_API_TOKEN || "AX7EAAIjcDFmOTIyN2UzNDAwM2I0MjBhOWU0NjMwODJjMTEzZmNhZXAxMA"
+  url: redisUrl || fallbackUrl,
+  token: redisToken || fallbackToken,
 });
 
 // Export as default for backward compatibility

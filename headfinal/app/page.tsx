@@ -9,7 +9,21 @@ import { Coins, GamepadIcon as GameController, Trophy, User, Volume2, VolumeX } 
 import { motion } from "framer-motion"
 import GameText from "@/components/game-text"
 import { useToast } from "@/components/ui/use-toast"
-import Leaderboard from "@/components/leaderboard"
+import dynamic from "next/dynamic"
+
+// Fallback component if Leaderboard fails to load
+const LeaderboardFallback = () => (
+  <div className="p-6 bg-blue-900 border-4 border-yellow-400 rounded-lg shadow-lg text-center">
+    <h3 className="text-xl font-bold text-white mb-4">Loading Leaderboard...</h3>
+    <p className="text-gray-300">Please wait while we fetch the latest player rankings.</p>
+  </div>
+)
+
+// Use dynamic import with fallback for Leaderboard component
+const Leaderboard = dynamic(() => import("@/components/leaderboard"), {
+  ssr: false,
+  loading: LeaderboardFallback,
+})
 
 export default function Home() {
   const [walletConnected, setWalletConnected] = useState(false)

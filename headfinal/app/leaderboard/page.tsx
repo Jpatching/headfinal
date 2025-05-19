@@ -9,6 +9,21 @@ import Leaderboard from "@/components/leaderboard"
 import GameHeader from "@/components/game-header"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
+import dynamic from "next/dynamic"
+
+// Fallback component if Leaderboard fails to load
+const LeaderboardFallback = () => (
+  <div className="p-6 bg-blue-900 border-4 border-yellow-400 rounded-lg shadow-lg text-center">
+    <h3 className="text-xl font-bold text-white mb-4">Loading Leaderboard...</h3>
+    <p className="text-gray-300">Please wait while we fetch the latest player rankings.</p>
+  </div>
+)
+
+// Use dynamic import with fallback for Leaderboard component
+const LeaderboardComponent = dynamic(() => import("@/components/leaderboard"), {
+  ssr: false,
+  loading: LeaderboardFallback,
+})
 
 export default function LeaderboardPage() {
   const [limit, setLimit] = useState(25)
@@ -41,11 +56,10 @@ export default function LeaderboardPage() {
         >
           {/* Game logo/header */}
           <motion.div className="w-full mb-6">
-            <GameHeader title="LEADERBOARD" />
-          </motion.div>
+            <GameHeader title="LEADERBOARD" />          </motion.div>
 
           {/* Leaderboard */}
-          <Leaderboard limit={limit} />
+          <LeaderboardComponent limit={limit} />
 
           {/* Controls to view more/less players */}
           <div className="mt-6 flex justify-center gap-4">
