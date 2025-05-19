@@ -37,20 +37,30 @@ export default function DirectMatchPage() {
     
     checkWallet();
   }, []);
-  
-  // Fetch match details
+    // Fetch match details
   useEffect(() => {
     const fetchMatchDetails = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/game/${matchId}`);
+        // Make sure we're not sending match:match: as prefix
+        const cleanMatchId = matchId.replace('match:', '');
+        const response = await fetch(`/api/matches/${cleanMatchId}`);
         
         if (!response.ok) {
-          throw new Error("Failed to load match details");
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.message || "Failed to load match details");
+        }
+          const data = await response.json();
+        if (data.status === 'error') {
+          throw new Error(data.message || "Match data not found");
         }
         
-        const data = await response.json();
-        setMatch(data);
+        // Ensure we're getting the proper match data
+        if (!data.match) {
+          throw new Error("Match data format is invalid");
+        }
+        
+        setMatch(data.match);
       } catch (error) {
         console.error("Error fetching match:", error);
         setError(error instanceof Error ? error.message : "Unknown error");
@@ -63,10 +73,9 @@ export default function DirectMatchPage() {
       fetchMatchDetails();
     }
   }, [matchId]);
-  
-  // Determine if current wallet is player1 or player2
-  const isPlayer1 = walletPublicKey && match?.player1 === walletPublicKey;
-  const isPlayer2 = walletPublicKey && match?.player2 === walletPublicKey;
+    // Determine if current wallet is player1 or player2
+  const isPlayer1 = walletPublicKey && match?.player1PublicKey === walletPublicKey;
+  const isPlayer2 = walletPublicKey && match?.player2PublicKey === walletPublicKey;
   const isParticipant = isPlayer1 || isPlayer2;
   
   return (
@@ -139,27 +148,25 @@ export default function DirectMatchPage() {
               )}
               
               <div className="bg-blue-900/50 backdrop-blur-sm p-4 rounded-lg border border-blue-800 mb-6 w-full">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
+                <div className="grid grid-cols-2 gap-4">                  <div>
                     <GameText variant="subheading" className="text-blue-300">Match ID</GameText>
-                    <GameText variant="body">{match.id}</GameText>
+                    <GameText variant="subtitle">{match.id}</GameText>
                   </div>
                   <div>
                     <GameText variant="subheading" className="text-blue-300">Bet Amount</GameText>
-                    <GameText variant="body">{match.betAmount} SOL</GameText>
+                    <GameText variant="subtitle">{match.betAmount} SOL</GameText>
                   </div>
                   <div>
                     <GameText variant="subheading" className="text-blue-300">Player 1</GameText>
-                    <GameText variant="body">{`${match.player1.slice(0, 6)}...${match.player1.slice(-4)}`}</GameText>
+                    <GameText variant="subtitle">{`${match.player1PublicKey.slice(0, 6)}...${match.player1PublicKey.slice(-4)}`}</GameText>
                   </div>
                   <div>
                     <GameText variant="subheading" className="text-blue-300">Player 2</GameText>
-                    <GameText variant="body">{`${match.player2.slice(0, 6)}...${match.player2.slice(-4)}`}</GameText>
+                    <GameText variant="subtitle">{`${match.player2PublicKey.slice(0, 6)}...${match.player2PublicKey.slice(-4)}`}</GameText>
                   </div>
                 </div>
               </div>
-              
-              <div className="w-full">
+                <div className="w-full">
                 <GameComponent
                   betAmount={Number(match.betAmount)}
                   teamA={isPlayer1 ? "YOU" : `PLAYER 1`}

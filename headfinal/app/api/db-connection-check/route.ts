@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
       const vercelKvPing = await kv.ping();
       vercelKvStatus = vercelKvPing === 'PONG' ? 'connected' : 'error';
     } catch (error) {
-      vercelKvError = error.message;
+      vercelKvError = error instanceof Error ? error.message : String(error);
     }
     
     // Test the Upstash Redis client (@upstash/redis)
@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
       const upstashPing = await redis.ping();
       upstashStatus = upstashPing === 'PONG' ? 'connected' : 'error';
     } catch (error) {
-      upstashError = error.message;
+      upstashError = error instanceof Error ? error.message : String(error);
     }
     
     // Test basic key-value operations
@@ -55,7 +55,7 @@ export async function GET(req: NextRequest) {
         };
       } catch (error) {
         operationsStatus = {
-          error: error.message
+          error: error instanceof Error ? error.message : String(error)
         };
       }
     }
@@ -69,7 +69,7 @@ export async function GET(req: NextRequest) {
         sampleKeys: keys.slice(0, 5)
       };
     } catch (error) {
-      stats = { error: error.message };
+      stats = { error: error instanceof Error ? error.message : String(error) };
     }
     
     return NextResponse.json({
@@ -100,7 +100,7 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     console.error('Database Connection Check Error:', error);
     return NextResponse.json(
-      { status: 'error', message: error.message },
+      { status: 'error', message: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     );
   }

@@ -26,8 +26,7 @@ async function verifyDeployment(deploymentUrl = process.env.VERCEL_URL) {
   }
   
   console.log(`🔍 Checking deployment at: ${deploymentUrl}`);
-  
-  // Check KV Status
+    // Check KV Status
   try {
     const kvStatusUrl = `${deploymentUrl}/api/kv-status`;
     console.log(`\n📡 Checking KV status at: ${kvStatusUrl}`);
@@ -49,6 +48,59 @@ async function verifyDeployment(deploymentUrl = process.env.VERCEL_URL) {
     
     console.log('\n📊 KV Response Details:');
     console.log(JSON.stringify(data, null, 2));
+  } catch (error) {
+    console.log('   ❌ Failed to check KV status:', error.message);
+  }
+  
+  // Check Matchmaking Health
+  try {
+    const matchmakingHealthUrl = `${deploymentUrl}/api/matchmaking-health`;
+    console.log(`\n🎮 Checking Matchmaking Health at: ${matchmakingHealthUrl}`);
+    
+    const response = await fetch(matchmakingHealthUrl);
+    const data = await response.json();
+    
+    console.log(`   Status code: ${response.status}`);
+    console.log(`   Matchmaking system status: ${data.status}`);
+    console.log(`   Redis connection: ${data.redis}`);
+    
+    if (data.status === 'healthy') {
+      console.log('   ✅ Matchmaking system is healthy!');
+    } else {
+      console.log('   ⚠️ Matchmaking system is degraded.');
+    }
+    
+    console.log('\n📊 Matchmaking Health Details:');
+    console.log('   Queue count:', data.matchmaking?.queueCount);
+    console.log('   Active matches:', data.matchmaking?.activeMatches);
+    console.log('   Last cleanup run:', data.matchmaking?.cleanup?.lastRun || 'Never');
+    
+    if (!data.matchmaking?.cleanup?.isRecent) {
+      console.log('   ⚠️ Cleanup job has not run recently. Check Vercel Cron Jobs.');
+    }
+  } catch (error) {
+    console.log('   ❌ Failed to check matchmaking health:', error.message);
+  }
+  
+  // Check Matchmaking Debug
+  try {
+    const matchmakingDebugUrl = `${deploymentUrl}/api/matchmaking-debug`;
+    console.log(`\n🔍 Checking Matchmaking Debug Info at: ${matchmakingDebugUrl}`);
+    
+    const response = await fetch(matchmakingDebugUrl);
+    const data = await response.json();
+    
+    console.log(`   Status code: ${response.status}`);
+    
+    if (data.status === 'ok') {
+      console.log('   ✅ Matchmaking debug endpoint is responding correctly!');
+      console.log(`   Keys found: ${data.debugData?.allKeys?.length || 0}`);
+    } else {
+      console.log('   ❌ Matchmaking debug endpoint reported an error:', data.message);
+    }
+  } catch (error) {
+    console.log('   ❌ Failed to check matchmaking debug info:', error.message);
+  }
   } catch (error) {
     console.error('\n❌ Error checking KV status:', error.message);
   }

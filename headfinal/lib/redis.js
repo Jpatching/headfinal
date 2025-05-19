@@ -30,29 +30,55 @@ const redis = getRedisClient();
 export async function updateLeaderboard(playerId, score, type = 'winnings') {
   try {
     const leaderboardKeyName = `leaderboard:${type}`;
-    // The correct format for Upstash Redis zadd
-    return await redis.zadd(leaderboardKeyName, { [playerId]: score });
+    // Use consistent format for Upstash Redis zadd
+    return await redis.zadd(leaderboardKeyName, { score, member: playerId });
   } catch (error) {
     console.error('Error updating leaderboard:', error);
     return false;
   }
 }
 
-// Function to get top players from leaderboard
+// Function to set a player's team name
+export async function setPlayerTeamName(playerId, teamName) {
+  try {
+    return await redis.set(`player:${playerId}:teamName`, teamName);
+  } catch (error) {
+    console.error('Error setting player team name:', error);
+    return false;
+  }
+}
+
+// Function to get a player's team name
+export async function getPlayerTeamName(playerId) {
+  try {
+    return await redis.get(`player:${playerId}:teamName`) || 'Unknown Team';
+  } catch (error) {
+    console.error('Error getting player team name:', error);
+    return 'Unknown Team';
+  }
+}
+
+// Updated function to get leaderboard with team names
 export async function getLeaderboard(type = 'winnings', limit = 10) {
   try {
     const leaderboardKeyName = `leaderboard:${type}`;
     // Get the top players by score (descending order)
     const results = await redis.zrange(leaderboardKeyName, 0, limit - 1, { withScores: true, rev: true });
     
-    // Format the results
-    return results.map((item, index) => {
-      return {
-        rank: index + 1,
-        playerId: item.member,
-        score: item.score,
-      };
-    });
+    // Get team names for each player and format the results
+    const leaderboardWithTeams = await Promise.all(
+      results.map(async (item, index) => {
+        const teamName = await getPlayerTeamName(item.member);
+        return {
+          rank: index + 1,
+          playerId: item.member,
+          teamName: teamName,
+          score: item.score,
+        };
+      })
+    );
+    
+    return leaderboardWithTeams;
   } catch (error) {
     console.error('Error fetching leaderboard:', error);
     return [];
@@ -64,5 +90,7 @@ export function useLeaderboard() {
   return {
     getLeaderboard,
     updateLeaderboard,
+    setPlayerTeamName,
+    getPlayerTeamName,
   };
 }

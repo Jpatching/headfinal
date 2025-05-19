@@ -2,8 +2,12 @@ import { Redis } from "@upstash/redis";
 
 // Redis configuration from environment
 export const REDIS_CONFIG = {
-  url: process.env.UPSTASH_REDIS_REST_URL || "https://intimate-cowbird-32452.upstash.io",
-  token: process.env.UPSTASH_REDIS_REST_TOKEN || "AX7EAAIjcDFmOTIyN2UzNDAwM2I0MjBhOWU0NjMwODJjMTEzZmNhZXAxMA",
+  url: process.env.UPSTASH_REDIS_REST_URL || 
+      process.env.UPSTASH_REDIS_KV_REST_API_URL || 
+      "https://exotic-viper-32560.upstash.io",
+  token: process.env.UPSTASH_REDIS_REST_TOKEN || 
+        process.env.UPSTASH_REDIS_KV_REST_API_TOKEN || 
+        "AX8wAAIjcDE2MjViZDE0MWJjZDc0NjkwODVmYTRlYTFhMTcwYjkxMHAxMA"
 }
 
 // Create a Redis client using environment variables

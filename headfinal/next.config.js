@@ -11,86 +11,67 @@ const nextConfig = {
     unoptimized: true,
   },
 
-  reactStrictMode: true,  // Add output configuration for better static optimization
-  output: 'standalone',
+  reactStrictMode: true,
+  output: 'standalone', // Optimize for production deployment
+  
   // Skip TypeScript type checking during the build process (to be safe)
   typescript: {
     ignoreBuildErrors: true,
   },
   
-  // Skip ESLint during build
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-
-  // Disable ESLint during build
+  // Skip ESLint during build for faster deployments
   eslint: {
     ignoreDuringBuilds: true,
   },
 
-  // Add environment variables configuration
+  // Moved from experimental to root level as required by Next.js 15.2.4
+  outputFileTracingExcludes: {
+    '*': ['**/*'],
+  },
+  // Add environment variables configuration with fallbacks
   env: {
     REDIS_URL: process.env.UPSTASH_REDIS_KV_URL || process.env.REDIS_URL || 'redis://localhost:6379',
     // Add compatibility layer for new env var names
-    UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL,
-    UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN,
+    UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL || "https://exotic-viper-32560.upstash.io",
+    UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN || "AX8wAAIjcDE2MjViZDE0MWJjZDc0NjkwODVmYTRlYTFhMTcwYjkxMHAxMA",
     // Make sure Vercel KV client has what it needs
-    KV_REST_API_URL: process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL,
-    KV_REST_API_TOKEN: process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN,
+    KV_REST_API_URL: process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL,
+    KV_REST_API_TOKEN: process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN,
     KV_REST_API_READ_ONLY_TOKEN: process.env.KV_REST_API_READ_ONLY_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_READ_ONLY_TOKEN,
+    // Expose environment type to client
+    NEXT_PUBLIC_VERCEL_ENV: process.env.VERCEL_ENV || "development",
+    NEXT_PUBLIC_UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL || "https://exotic-viper-32560.upstash.io",
   },
   
-  // Ensure runtime error handling
-  onDemandEntries: {
-    // period (in ms) where the server will keep pages in the buffer
-    maxInactiveAge: 25 * 1000,
-    // number of pages that should be kept simultaneously without being disposed
-    pagesBufferLength: 4,
+  // Update experimental section (remove the moved property)
+  experimental: {
+    // Other experimental features can stay here
   },
-    // Add webpack config to fix build issues
+  
+  // Optimize build process
   webpack: (config) => {
-    // Optimize WebAssembly handling to fix hashing
+    // Optimize module IDs for better caching
     config.optimization.moduleIds = 'deterministic';
     
-    // Disable WebAssembly optimization that's causing problems
+    // Configure WebAssembly handling for production
     config.experiments = {
       ...config.experiments,
       syncWebAssembly: false,
       asyncWebAssembly: true,
     };
     
-    // Increase memory limit
+    // Increase memory limit and performance settings
     config.performance = {
       ...config.performance,
       hints: false,
     };
     
-    // Fix for hash generation issues
+    // Minimize logging during build
     config.infrastructureLogging = {
       level: 'error',
     };
     
-    // Add hash fallback mechanism
-    if (config.optimization.realContentHash) {
-      config.optimization.realContentHash = false;
-    }
-    
     return config;
-  },
-  
-  // Add compiler options to ignore type errors during build
-  typescript: {
-    // !! WARN !!
-    // This will allow production builds to successfully complete even if
-    // your project has type errors.
-    ignoreBuildErrors: true,
-  },
-    // Disable ESLint during builds for performance
-  eslint: {
-    ignoreDuringBuilds: true,
   },
 }
 

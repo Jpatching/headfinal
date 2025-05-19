@@ -7,6 +7,14 @@ require('dotenv').config();
 const { v4: uuidv4 } = require('uuid');
 const { Redis } = require('@upstash/redis');
 
+// Check if running in production
+if (process.env.NODE_ENV === 'production' || process.env.VERCEL_ENV === 'production') {
+  console.error('⛔ WARNING: This script is not meant to be run in production!');
+  console.error('⛔ Running this would create test data in your production database.');
+  console.error('⛔ Please run this only in development environment.');
+  process.exit(1);
+}
+
 // Constants - Keep in sync with actual app constants
 const PLAYER_KEY_PREFIX = 'player:';
 const MATCH_REQUEST_PREFIX = 'matchRequest:';
@@ -61,21 +69,25 @@ async function testGameFlow() {
     const player1 = {
       publicKey: player1Id,
       username: 'Test Player 1',
+      teamName: 'jpatchings-projects', // Add your team name
       wins: 0,
       losses: 0,
       totalWinnings: 0,
       totalPlayed: 0,
-      lastPlayed: Date.now()
+      lastPlayed: Date.now(),
+      verified: false // Mark as test data
     };
     
     const player2 = {
       publicKey: player2Id,
       username: 'Test Player 2',
+      teamName: 'jpatchings-projects', // Add your team name
       wins: 0,
       losses: 0,
       totalWinnings: 0,
       totalPlayed: 0,
-      lastPlayed: Date.now()
+      lastPlayed: Date.now(),
+      verified: false // Mark as test data
     };
     
     await redis.set(PLAYER_KEY_PREFIX + player1Id, JSON.stringify(player1));
@@ -110,8 +122,8 @@ async function testGameFlow() {
     
     // Add to pending matches sorted set
     const pendingMatchesKey = PENDING_MATCHES_PREFIX + betAmount;
-    await redis.zadd(pendingMatchesKey, Date.now(), matchRequestKey1);
-    await redis.zadd(pendingMatchesKey, Date.now() + 100, matchRequestKey2);
+    await redis.zadd(pendingMatchesKey, { score: Date.now(), member: matchRequestKey1 });
+    await redis.zadd(pendingMatchesKey, { score: Date.now() + 100, member: matchRequestKey2 });
     
     console.log(`   ✅ Created match request for player 1: ${matchRequestKey1}`);
     console.log(`   ✅ Created match request for player 2: ${matchRequestKey2}`);

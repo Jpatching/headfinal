@@ -1,18 +1,35 @@
 {
+  "version": 2,
+  "buildCommand": "next build",
+  "outputDirectory": ".next",
   "framework": "nextjs",
+  "regions": ["iad1"], 
   "env": {
-    "NODE_OPTIONS": "--max-old-space-size=4096",
-    "NEXT_TELEMETRY_DISABLED": "1"
+    "NEXT_PUBLIC_VERCEL_ENV": "production"
   },
-  "builds": [
-    {
-      "src": "next.config.js",
-      "use": "@vercel/next"
-    }
-  ],  "crons": [
+  "crons": [
     {
       "path": "/api/cron/cleanup-expired-matchmaking",
       "schedule": "0 0 * * *"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
     }
   ]
 }

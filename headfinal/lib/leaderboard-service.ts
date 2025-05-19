@@ -6,11 +6,13 @@ import { leaderboardKeyPrefix } from './kv-client';
 export interface PlayerStats {
   publicKey: string;
   username?: string;
+  teamName?: string;  // Add team name field
   wins: number;
   losses: number;
   totalWinnings: number;
   totalPlayed: number;
   lastPlayed: number;
+  verified: boolean;  // Add verification flag
 }
 
 // Main leaderboard keys
@@ -39,15 +41,28 @@ async function getClient() {
 export async function updatePlayerStats({ 
   publicKey, 
   username, 
+  teamName,
   isWinner, 
-  winAmount 
+  winAmount,
+  verified = false
 }: { 
   publicKey: string; 
   username?: string; 
+  teamName?: string;
   isWinner: boolean; 
   winAmount: number;
+  verified?: boolean;
 }): Promise<PlayerStats> {
   try {
+    // Validate inputs to prevent fake data
+    if (!publicKey || publicKey.length < 8) {
+      throw new Error("Invalid public key");
+    }
+    
+    if (winAmount < 0 || winAmount > 1000) {
+      throw new Error("Invalid win amount");
+    }
+    
     const { useKv } = await getClient();
     
     // Get existing player stats or create new ones
@@ -80,18 +95,29 @@ export async function updatePlayerStats({
       playerStats = {
         publicKey,
         username: username || publicKey.slice(0, 6) + '...',
+        teamName: teamName || 'jpatchings-projects', // Use team name or default to your team
         wins: isWinner ? 1 : 0,
         losses: isWinner ? 0 : 1,
         totalWinnings: isWinner ? winAmount : 0,
         totalPlayed: 1,
-        lastPlayed: Date.now()
+        lastPlayed: Date.now(),
+        verified: verified
       };
       console.log(`Created new player record for ${publicKey.slice(0,6)}...`);
     }
     
-    // Update username if provided
+    // Update username and team name if provided
     if (username) {
       playerStats.username = username;
+    }
+    
+    if (teamName) {
+      playerStats.teamName = teamName;
+    }
+    
+    // Update verification status if provided
+    if (verified) {
+      playerStats.verified = verified;
     }
     
     // Update last played timestamp
@@ -106,25 +132,16 @@ export async function updatePlayerStats({
       console.log(`Saved player stats to KV for ${publicKey.slice(0,6)}...`);
     } else {
       await redis.set(playerKey, JSON.stringify(playerStats));
-      // Use the direct format for zadd that works with the Upstash Redis client
-      await redis.zadd(LEADERBOARD_BY_WINNINGS_KEY, playerStats.totalWinnings, publicKey);
-      await redis.zadd(LEADERBOARD_BY_WINS_KEY, playerStats.wins, publicKey);
+      // Use the correct format for Upstash Redis ZADD
+      await redis.zadd(LEADERBOARD_BY_WINNINGS_KEY, { score: playerStats.totalWinnings, member: publicKey });
+      await redis.zadd(LEADERBOARD_BY_WINS_KEY, { score: playerStats.wins, member: publicKey });
       console.log(`Saved player stats to Redis for ${publicKey.slice(0,6)}...`);
     }
     
     return playerStats;
   } catch (error) {
     console.error("Error updating player stats:", error);
-    // Return basic player stats as fallback
-    return {
-      publicKey,
-      username: username || publicKey.slice(0, 6) + '...',
-      wins: isWinner ? 1 : 0, 
-      losses: isWinner ? 0 : 1,
-      totalWinnings: isWinner ? winAmount : 0,
-      totalPlayed: 1,
-      lastPlayed: Date.now()
-    };
+    throw error;
   }
 }
 

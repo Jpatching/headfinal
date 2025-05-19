@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { redis } from '@/lib/redis-client';
 
+export const dynamic = 'force-dynamic'; // Add this to ensure the route is dynamic
+
 export async function GET(req: NextRequest) {
   try {
     // Simple ping test to verify connection

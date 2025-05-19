@@ -55,29 +55,33 @@ async function handleCreateRequest(playerPublicKey: string, betAmount: number) {
       { status: 400 }
     );
   }
-  
-  try {
-    // Generate a unique ID for this request
-    const requestId = uuidv4();
+    try {
+    // Create the match request using the updated function
+    const { matchRequest, error: createError } = await createMatchRequest(playerPublicKey, betAmount);
     
-    // Create the match request
-    const request = await createMatchRequest({
-      id: requestId,
-      playerPublicKey,
-      betAmount,
-      timestamp: Date.now(),
-      status: "pending"
-    });
+    if (createError || !matchRequest) {
+      return NextResponse.json(
+        { error: createError || "Failed to create match request" },
+        { status: 500 }
+      );
+    }
     
     // Try to find a match immediately
-    const match = await findMatch(request);
+    const { match, error: findError } = await findMatch(matchRequest.id);
+    
+    if (findError) {
+      return NextResponse.json(
+        { error: findError },
+        { status: 500 }
+      );
+    }
     
     if (match) {
       // Return match details if found
       return NextResponse.json({
         status: 'matched',
         matchId: match.id,
-        requestId,
+        requestId: matchRequest.id,
         player1: match.player1PublicKey,
         player2: match.player2PublicKey,
         betAmount: match.betAmount
@@ -103,14 +107,25 @@ async function handleCreateRequest(playerPublicKey: string, betAmount: number) {
 // Handle finding a match for existing request
 async function handleFindMatch(playerPublicKey: string, betAmount: number) {
   try {
+    // First create a temporary match request
+    const { matchRequest, error: createError } = await createMatchRequest(playerPublicKey, betAmount);
+    
+    if (createError || !matchRequest) {
+      return NextResponse.json(
+        { error: createError || "Failed to create match request" },
+        { status: 500 }
+      );
+    }
+    
     // Check for existing matches
-    const match = await findMatch({
-      id: uuidv4(), // Temporary ID
-      playerPublicKey,
-      betAmount,
-      timestamp: Date.now(),
-      status: "pending"
-    });
+    const { match, error: findError } = await findMatch(matchRequest.id);
+    
+    if (findError) {
+      return NextResponse.json(
+        { error: findError },
+        { status: 500 }
+      );
+    }
     
     if (match) {
       return NextResponse.json({
@@ -143,11 +158,17 @@ async function handleCancelRequest(requestId: string) {
       { status: 400 }
     );
   }
-  
-  try {
-    const result = await cancelMatchRequest(requestId);
+    try {
+    const { success, error: cancelError } = await cancelMatchRequest(requestId);
     
-    if (result) {
+    if (cancelError) {
+      return NextResponse.json(
+        { error: cancelError },
+        { status: 500 }
+      );
+    }
+    
+    if (success) {
       return NextResponse.json({
         status: 'cancelled',
         requestId,

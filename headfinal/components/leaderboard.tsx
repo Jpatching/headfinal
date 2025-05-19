@@ -2,10 +2,9 @@
 
 import { useState, useEffect, useRef } from "react"
 import { Card } from "@/components/ui/card"
-import { RefreshCw } from "lucide-react"
-import { Trophy } from "lucide-react"
+import { Trophy, RefreshCw } from "lucide-react"
 import GameText from "@/components/game-text"
-import { getLeaderboard } from "@/lib/redis"
+import { getLeaderboard } from "@/lib/redis.js"
 import { Button } from "@/components/ui/button"
 
 interface LeaderboardEntry {

@@ -19,8 +19,8 @@ async function verifyRedisConnection() {
   try {
     console.log('\n1. Trying Upstash Redis REST API connection...');
     
-    const restUrl = process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_KV_REST_API_URL;
-    const restToken = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_KV_REST_API_TOKEN;
+    const restUrl = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
+    const restToken = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
     
     if (!restUrl || !restToken) {
       console.log('  ❌ Missing REST API URL or token');
@@ -98,7 +98,10 @@ async function verifyRedisConnection() {
     // Test sorted set operations (needed for leaderboards)
     const testZsetKey = `test:zset:${Date.now()}`;
     
-    await redis.zadd(testZsetKey, { score1: 10, score2: 20, score3: 30 });
+    // FIXED: Correct format for ZADD with Upstash Redis
+    await redis.zadd(testZsetKey, { score: 10, member: "score1" });
+    await redis.zadd(testZsetKey, { score: 20, member: "score2" });
+    await redis.zadd(testZsetKey, { score: 30, member: "score3" });
     console.log('  ✅ ZADD operation successful');
     
     const zsetResult = await redis.zrange(testZsetKey, 0, -1, { withScores: true });

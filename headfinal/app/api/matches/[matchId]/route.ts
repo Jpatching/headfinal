@@ -13,9 +13,7 @@ export async function GET(
         { status: 'error', message: "Match ID is required" },
         { status: 400 }
       );
-    }
-
-    const matchData = await redis.get(`match:${matchId}`);
+    }    const matchData = await redis.get(`match:${matchId}`);
     
     if (!matchData) {
       return NextResponse.json(
@@ -26,7 +24,7 @@ export async function GET(
 
     return NextResponse.json({
       status: 'success',
-      match: matchData
+      match: JSON.parse(matchData as string)
     });
   } catch (error) {
     console.error("Error fetching match:", error);

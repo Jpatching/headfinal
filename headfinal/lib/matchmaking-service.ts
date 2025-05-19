@@ -28,22 +28,69 @@ export interface Match {
   winnerId?: string;
 }
 
+// Add the missing function
+function getMatchRequestKey(requestId: string): string {
+  return `${matchRequestPrefix}${requestId}`;
+}
+
 /**
- * Creates a new match request and adds it to the pending queue
+ * Creates a new match request for a player with a given bet amount
+ * This is the simplified version that's used from the play page
  */
-export async function createMatchRequest(request: MatchRequest): Promise<MatchRequest> {
+export async function createMatchRequest(playerPublicKey: string, betAmount: number): Promise<{matchRequest: MatchRequest | null, error: string | null}> {
   try {
-    const requestKey = `${matchRequestPrefix}${request.id}`;
+    // Create a new match request
+    const request: MatchRequest = {
+      id: uuidv4(),
+      playerPublicKey,
+      betAmount,
+      timestamp: Date.now(),
+      status: "pending"
+    };
+    
+    // Create the request directly
+    const requestKey = getMatchRequestKey(request.id);
     const pendingMatchesKey = getPendingMatchesByAmountKey(request.betAmount);
     
-    // Use a Redis transaction to ensure both operations succeed or fail together
+    // Use a Redis pipeline to ensure both operations succeed or fail together
     const pipeline = redis.pipeline();
     
     // Store the request details
     pipeline.set(requestKey, JSON.stringify(request));
     
     // Add to the sorted set of pending matches by amount
-    pipeline.zadd(pendingMatchesKey, request.timestamp, request.id);
+    // Fix: Use the correct format for Upstash Redis ZADD
+    pipeline.zadd(pendingMatchesKey, { score: request.timestamp, member: request.id });
+    
+    // Execute both commands
+    await pipeline.exec();
+    
+    console.log(`Created match request ${request.id} for player ${request.playerPublicKey}`);
+    
+    return { matchRequest: request, error: null };
+  } catch (error: any) {
+    console.error('Error creating match request:', error);
+    return { matchRequest: null, error: `Failed to create match request: ${error?.message || 'Unknown error'}` };
+  }
+}
+
+/**
+ * Creates a new match request and adds it to the pending queue
+ */
+export async function createMatchRequestObject(request: MatchRequest): Promise<MatchRequest> {
+  try {
+    const requestKey = getMatchRequestKey(request.id);
+    const pendingMatchesKey = getPendingMatchesByAmountKey(request.betAmount);
+    
+    // Use a Redis pipeline to ensure both operations succeed or fail together
+    const pipeline = redis.pipeline();
+    
+    // Store the request details
+    pipeline.set(requestKey, JSON.stringify(request));
+    
+    // Add to the sorted set of pending matches by amount
+    // Fix: Use the correct format for Upstash Redis ZADD
+    pipeline.zadd(pendingMatchesKey, { score: request.timestamp, member: request.id });
     
     // Execute both commands
     await pipeline.exec();
@@ -57,27 +104,70 @@ export async function createMatchRequest(request: MatchRequest): Promise<MatchRe
 }
 
 /**
- * Tries to find a match for a player's request
- * Uses Redis transactions to ensure atomicity and prevent race conditions
+ * Finds a match for an existing match request by ID
+ * This is the version used from the play page
  */
-export async function findMatch(request: MatchRequest): Promise<Match | null> {
+export async function findMatch(requestId: string): Promise<{match: Match | null, error: string | null}> {
+  try {
+    // Get the request
+    const requestKey = getMatchRequestKey(requestId);
+    const requestData = await redis.get(requestKey);
+    
+    if (!requestData) {
+      return { match: null, error: "Match request not found" };
+    }
+    
+    const request = JSON.parse(requestData as string) as MatchRequest;
+    
+    // If the request is already matched, get the match
+    if (request.status === 'matched' && request.matchId) {
+      const match = await getMatch(request.matchId);
+      return { match, error: null };
+    }
+    
+    // Otherwise try to find a match
+    const match = await findMatchInternal(request);
+    
+    if (match) {
+      // Update the request to matched status
+      request.status = 'matched';
+      request.matchId = match.id;
+      await redis.set(requestKey, JSON.stringify(request));
+      
+      // Remove from pending queue
+      const pendingMatchesKey = getPendingMatchesByAmountKey(request.betAmount);
+      await redis.zrem(pendingMatchesKey, request.id);
+      
+      return { match, error: null };
+    }
+    
+    return { match: null, error: null };
+  } catch (error: any) {
+    console.error('Error finding match:', error);
+    return { match: null, error: `Failed to find match: ${error?.message || 'Unknown error'}` };
+  }
+}
+
+/**
+ * Tries to find a match for a player's request
+ * Uses optimistic approach instead of Redis transactions which aren't supported in Upstash
+ */
+async function findMatchInternal(request: MatchRequest): Promise<Match | null> {
   try {
     const pendingMatchesKey = getPendingMatchesByAmountKey(request.betAmount);
     
-    // Use Redis WATCH to create an optimistic lock on the pending matches set
-    await redis.watch(pendingMatchesKey);
-    
+    // Replace Redis WATCH with optimistic concurrency approach
     // Try to find a pending match request (oldest first)
     // Exclude the current player's own requests
     const pendingRequests = await redis.zrange(pendingMatchesKey, 0, -1);
     
     for (const requestId of pendingRequests) {
-      const requestKey = `${matchRequestPrefix}${requestId}`;
+      const requestKey = getMatchRequestKey(requestId as string);
       const pendingRequest = await redis.get(requestKey);
       
       if (!pendingRequest) continue;
       
-      const parsedRequest = JSON.parse(pendingRequest) as MatchRequest;
+      const parsedRequest = JSON.parse(pendingRequest as string) as MatchRequest;
       
       // Skip if this is the same player or request is not pending
       if (parsedRequest.playerPublicKey === request.playerPublicKey || 
@@ -95,55 +185,62 @@ export async function findMatch(request: MatchRequest): Promise<Match | null> {
         status: "active"
       };
       
-      // Use a transaction to ensure all operations succeed or fail together
-      const multi = redis.multi();
+      // Use a pipeline instead of transaction
+      const pipeline = redis.pipeline();
       
       // Update the pending request to matched
       parsedRequest.status = 'matched';
       parsedRequest.matchId = match.id;
-      multi.set(requestKey, JSON.stringify(parsedRequest));
+      pipeline.set(requestKey, JSON.stringify(parsedRequest));
       
       // Remove the request from pending set
-      multi.zrem(pendingMatchesKey, requestId);
+      pipeline.zrem(pendingMatchesKey, requestId as string);
       
       // Store the match
-      multi.set(`${matchPrefix}${match.id}`, JSON.stringify(match));
+      pipeline.set(`${matchPrefix}${match.id}`, JSON.stringify(match));
       
-      // Execute the transaction
-      const result = await multi.exec();
+      // Execute the pipeline
+      const result = await pipeline.exec();
       
-      // If transaction succeeded, return the match
+      // If pipeline succeeded, return the match
       if (result) {
         console.log(`Created match ${match.id} between ${match.player1PublicKey} and ${match.player2PublicKey}`);
         return match;
       }
     }
     
-    // If no match was found, release the watch
-    await redis.unwatch();
+    // If no match was found
     return null;
   } catch (error) {
     console.error('Error finding match:', error);
-    await redis.unwatch();
     throw error;
   }
 }
 
 /**
  * Cancels a pending match request
+ * Returns a standardized response format matching other functions
  */
-export async function cancelMatchRequest(requestId: string): Promise<boolean> {
+export async function cancelMatchRequest(requestId: string): Promise<{success: boolean, error: string | null}> {
   try {
-    const requestKey = `${matchRequestPrefix}${requestId}`;
+    if (!requestId) {
+      return { success: false, error: "Invalid request ID" };
+    }
+    
+    const requestKey = getMatchRequestKey(requestId);
     
     // Get the request
     const requestData = await redis.get(requestKey);
-    if (!requestData) return false;
+    if (!requestData) {
+      return { success: false, error: "Match request not found" };
+    }
     
-    const request = JSON.parse(requestData) as MatchRequest;
+    const request = JSON.parse(requestData as string) as MatchRequest;
     
     // Only pending requests can be cancelled
-    if (request.status !== 'pending') return false;
+    if (request.status !== 'pending') {
+      return { success: false, error: `Request is already ${request.status}` };
+    }
     
     // Mark as cancelled and remove from pending queue
     request.status = 'cancelled';
@@ -155,10 +252,10 @@ export async function cancelMatchRequest(requestId: string): Promise<boolean> {
     await pipeline.exec();
     
     console.log(`Cancelled match request ${requestId}`);
-    return true;
-  } catch (error) {
+    return { success: true, error: null };
+  } catch (error: any) {
     console.error('Error cancelling match request:', error);
-    throw error;
+    return { success: false, error: `Failed to cancel match request: ${error?.message || 'Unknown error'}` };
   }
 }
 
@@ -167,13 +264,13 @@ export async function cancelMatchRequest(requestId: string): Promise<boolean> {
  */
 export async function getMatchStatus(requestId: string): Promise<{status: string, matchId?: string} | null> {
   try {
-    const requestKey = `${matchRequestPrefix}${requestId}`;
+    const requestKey = getMatchRequestKey(requestId);
     
     // Get the request
     const requestData = await redis.get(requestKey);
     if (!requestData) return null;
     
-    const request = JSON.parse(requestData) as MatchRequest;
+    const request = JSON.parse(requestData as string) as MatchRequest;
     
     return {
       status: request.status,
@@ -196,7 +293,7 @@ export async function getMatch(matchId: string): Promise<Match | null> {
     const matchData = await redis.get(matchKey);
     if (!matchData) return null;
     
-    return JSON.parse(matchData) as Match;
+    return JSON.parse(matchData as string) as Match;
   } catch (error) {
     console.error('Error getting match:', error);
     throw error;
@@ -218,7 +315,7 @@ export async function updateMatchStatus(
     const matchData = await redis.get(matchKey);
     if (!matchData) return null;
     
-    const match = JSON.parse(matchData) as Match;
+    const match = JSON.parse(matchData as string) as Match;
     
     // Update status
     match.status = status;
@@ -241,6 +338,12 @@ export async function updateMatchStatus(
  * Process expired match requests (older than specified time)
  * This function should be called periodically by a CRON job or similar
  */
+// Define interface for Redis zrange with scores result
+interface ZRangeWithScores {
+  member: string;
+  score: number;
+}
+
 export async function processExpiredRequests(expiryTimeMs: number = 5 * 60 * 1000): Promise<number> {
   try {
     const now = Date.now();
@@ -251,21 +354,24 @@ export async function processExpiredRequests(expiryTimeMs: number = 5 * 60 * 100
     const keys = await redis.keys(`${pendingMatchesByAmountPrefix}*`);
     
     for (const key of keys) {
-      // Get all requests in this amount category
-      const requests = await redis.zrangebyscore(key, 0, cutoffTime);
+      // Since zrangebyscore doesn't exist in Upstash Redis, use zrange with filter
+      const allMembers = await redis.zrange(key, 0, -1, { withScores: true }) as ZRangeWithScores[];
+      const expiredRequests = allMembers
+        .filter(item => item.score < cutoffTime)
+        .map(item => item.member);
       
-      for (const requestId of requests) {
-        const requestKey = `${matchRequestPrefix}${requestId}`;
+      for (const requestId of expiredRequests) {
+        const requestKey = getMatchRequestKey(requestId as string);
         const requestData = await redis.get(requestKey);
         
         if (requestData) {
-          const request = JSON.parse(requestData) as MatchRequest;
+          const request = JSON.parse(requestData as string) as MatchRequest;
           
           // Only process pending requests
           if (request.status === 'pending') {
             request.status = 'expired';
             await redis.set(requestKey, JSON.stringify(request));
-            await redis.zrem(key, requestId);
+            await redis.zrem(key, requestId as string);
             expiredCount++;
           }
         }

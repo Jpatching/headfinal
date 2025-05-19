@@ -6,6 +6,32 @@
 require('dotenv').config();
 const { Redis } = require('@upstash/redis');
 const crypto = require('crypto');
+const readline = require('readline');
+
+// Check if running in production
+if (process.env.NODE_ENV === 'production' || process.env.VERCEL_ENV === 'production') {
+  console.error('⛔ WARNING: This script is not meant to be run in production!');
+  
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+  
+  rl.question('Are you sure you want to continue? This will create test data in PRODUCTION. (yes/no): ', (answer) => {
+    if (answer.toLowerCase() !== 'yes') {
+      console.log('Operation cancelled. No test data was created.');
+      rl.close();
+      process.exit(0);
+    } else {
+      console.log('Proceeding with caution...');
+      rl.close();
+      // Continue execution
+    }
+  });
+} else {
+  // Start the script immediately in dev environment
+  testLeaderboard().catch(console.error);
+}
 
 // Constants - ensure these match your application's constants
 const PLAYER_KEY_PREFIX = 'player:';
@@ -123,10 +149,12 @@ async function addTestPlayers(redis) {
     {
       id: `test_player_${crypto.randomBytes(4).toString('hex')}`,
       username: "Test Winner",
+      teamName: "jpatchings-projects", // Add your team name
       wins: 10,
       losses: 2,
       totalWinnings: 15.5,
-      totalPlayed: 12
+      totalPlayed: 12,
+      verified: false // Mark as test data
     },
     {
       id: `test_player_${crypto.randomBytes(4).toString('hex')}`,

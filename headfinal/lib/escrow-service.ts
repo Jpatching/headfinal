@@ -214,7 +214,7 @@ export async function cancelEscrow(
   playerPublicKey: string
 ): Promise<{ success: boolean; error: string | null }> {
   try {
-    const response = await fetch(`${ESCROW_API_ENDPOINT}/escrow/cancel`, {
+    const response = await fetch("/api/escrow/cancel", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

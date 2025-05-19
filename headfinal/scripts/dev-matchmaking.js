@@ -81,7 +81,7 @@ async function createTestMatchRequest(playerPublicKey, betAmount) {
     
     // Add to sorted set of pending matches by bet amount
     const betAmountKey = `${PENDING_MATCHES_PREFIX}${betAmount}`;
-    await redis.zadd(betAmountKey, { [matchRequestId]: Date.now() });
+    await redis.zadd(betAmountKey, { score: Date.now(), member: matchRequestId });
     
     console.log(`✅ Created match request: ${matchRequestId}`);
     return matchRequestId;
