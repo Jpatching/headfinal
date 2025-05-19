@@ -9,5 +9,10 @@
       "src": "next.config.js",
       "use": "@vercel/next"
     }
+  ],  "crons": [
+    {
+      "path": "/api/cron/cleanup-expired-matchmaking",
+      "schedule": "0 0 * * *"
+    }
   ]
 }
