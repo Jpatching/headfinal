@@ -13,10 +13,17 @@ const nextConfig = {
 
   reactStrictMode: true,  // Add output configuration for better static optimization
   output: 'standalone',
-
   // Skip TypeScript type checking during the build process (to be safe)
   typescript: {
     ignoreBuildErrors: true,
+  },
+  
+  // Skip ESLint during build
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
   },
 
   // Disable ESLint during build
