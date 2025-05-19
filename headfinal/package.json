@@ -16,9 +16,12 @@
     "redis": "node scripts/redis-tools.js",
     "verify": "node scripts/verify-deployment.js",
     "verify-redis": "node scripts/verify-redis.js",
+    "verify-matchmaking": "node scripts/verify-matchmaking.js",
+    "verify-vercel": "node scripts/verify-vercel-matchmaking.js",
     "test-matchmaking": "node scripts/test-matchmaking.js",
     "deploy": "npm run verify && vercel --prod",
     "sync-vercel": "vercel pull --environment=production && vercel env pull .env.local",
+    "set-vercel-url": "node scripts/update-vercel-url.js",
     "clean": "rimraf node_modules .next .vercel"
   },
   "dependencies": {
