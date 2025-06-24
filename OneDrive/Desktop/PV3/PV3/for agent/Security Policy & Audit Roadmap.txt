@@ -1,0 +1,98 @@
+Security Policy & Audit Roadmap – PV3 Gaming
+Last Updated: [Insert Date]
+PV3 Gaming is committed to a secure, transparent, and user-first environment. This document outlines
+the platform’s approach to security, including audits, failsafe mechanisms, and ongoing protections
+against exploits.
+
+1. 🛡 Core Security Principles
+• Non-custodial by design: User funds stored in PDAs controlled by smart contracts, not the
+platform
+• Game integrity: All games are validated server-side and reviewed before launch
+• Transparency-first: Key actions, payouts, and overrides are logged on-chain
+
+2. Hybrid Vault Architecture
+• Each user deposits SOL into a session PDA
+• PDA is used to fund wagers across multiple matches in a session
+• Users withdraw unused balance at any time
+• Minimizes wallet interruptions and improves UX
+
+3. Admin Failsafe Multisig (Hybrid Custody Safety Net)
+To prevent loss of user funds due to inactivity, exploits, or unhandled edge cases:
+• A 2-of-3 multisig has limited emergency powers
+• Composed of:
+• Alex (CEO)
+• Josh (CTO)
+• Legal/DAO Community Signer
+
+Powers of the Failsafe:
+Logged OnChain?
+
+Action
+
+Conditions
+
+Unlock stuck vault (e.g. 48h+ idle)
+
+Must be verified inactive and
+unclaimed
+
+Yes
+
+Pause game matchmaker
+
+Only during confirmed exploit
+
+Yes
+
+1
+
+Action
+
+Conditions
+
+Recover misrouted or invalid
+deposits
+
+Verified via support log
+
+Logged OnChain?
+Yes
+
+All such actions are limited by the smart contract logic and only usable in specific verified conditions.
+Users will always be able to verify any failsafe action retroactively.
+
+4. Smart Contract Audit Plan
+• All on-chain programs (match escrow, vault manager, signer logic) will be audited pre-launch
+• Audit provider options: OtterSec, Sec3, Zellic, Halborn
+• Minimum 1 full formal audit before mainnet
+• Re-audit after major feature releases (e.g. token rewards layer)
+
+5. Continuous Monitoring
+• Match integrity logs saved to off-chain DB (via verifier/)
+• Automated risk triggers:
+• Abnormally high win rates
+• Match result signature mismatches
+• Rapid replay detection (bot behavior)
+
+6. Bug Bounty Program
+• Open to public and whitehat researchers
+• Hosted on Immunefi or private bounty board
+• Rewards range from $500–$10,000+ depending on severity
+
+7. 🔒 Backend/Infra Security
+• Backend services use OAuth + rate limiting
+• Player data stored in encrypted Postgres DB
+• Games sandboxed in iframes to avoid DOM injection
+• Future: encrypted match state logs
+
+Summary
+PV3 prioritizes smart contract-level safety, hybrid non-custodial access, and complete transparency. The
+admin multisig ensures user funds are recoverable only when justified and auditable — no silent rugpulls or opaque operations.
+
+2
+
+Let us know if you’d like this policy to be published in /docs/security.md for public verification.
+
+3
+
+

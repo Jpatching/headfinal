@@ -1,0 +1,24 @@
+{
+  "name": "pv3-contracts",
+  "version": "1.0.0",
+  "description": "PV3 Solana Smart Contracts",
+  "main": "deploy-pv3.js",
+  "scripts": {
+    "deploy": "node deploy-pv3.js",
+    "deploy:devnet": "SOLANA_CLUSTER=devnet SOLANA_RPC_URL=https://api.devnet.solana.com node deploy-pv3.js",
+    "build": "anchor build",
+    "test": "anchor test"
+  },
+  "dependencies": {
+    "@coral-xyz/anchor": "^0.30.1",
+    "@solana/web3.js": "^1.98.2",
+    "bn.js": "^5.2.2",
+    "dotenv": "^16.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

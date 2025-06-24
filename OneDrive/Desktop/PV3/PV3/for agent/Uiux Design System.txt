@@ -1,0 +1,152 @@
+🎮 PV3 UI/UX Design System
+Last Updated: [Insert Date]
+
+
+This design system outlines the visual and functional design guidelines for PV3's front-end platform.
+Inspired by modern gaming sites like Stake.com, it ensures a premium Web3 experience with a
+professional dark theme, interactive game cards, and smooth wallet integration.
+
+
+
+
+  Color Palette – Black & White Scheme
+
+              Purpose                   Color        Notes
+
+              Background (main)          #0F0F0F     Deep black for full-screen background
+
+              Card background            #1A1A1A     Slightly elevated game tiles
+
+              Border/Separator           #2B2B2B     Minimalist gray
+
+              Primary text               #FFFFFF     High contrast
+
+              Secondary text             #CCCCCC     Labels, hints
+
+              Accent highlight           #E6E6E6     Hover states and outlines
+
+              Button fill                #000000     With white text
+
+              Button outline hover       #FFFFFF     Subtle but clear call to action
+
+
+
+
+  Layout & Grid
+      • 12-column desktop grid, max width 1440px
+      • Sidebar (left): Persistent vertical nav
+      • Top bar (header): Wallet + user icon + site nav
+      • Main area: Game carousels (top), then grid (2–5 cards/row)
+
+  Breakpoints
+
+                               Device      Columns       Game Cards per row
+
+                               ≥1440px     12            5
+
+                               ≥1024px     12            4
+
+                               ≥768px      8             3
+
+                               <768px      4             2
+
+
+
+
+                                                     1
+ Typography
+    • Font Family: Inter (default), Audiowide (logo), Satoshi (alt headings)
+    • Headings: Uppercase, 20–32px, weight 600–700
+    • Body text: 14–16px, regular line height
+    • Buttons: Bold, uppercase, 14–16px
+
+
+
+
+ Core Components
+
+ Sidebar Menu
+
+    • Icons + label (left nav)
+    • Active state = white text + thin white left border
+    • Sections: Casino, Sports, My Bets, Live, Starting Soon
+
+ Top Nav
+
+    • Logo (left), Tabs (center), Wallet/User (right)
+    • Tabs include: Lobby, Originals, Featured, Trending
+    • Hover = subtle glow or color change
+
+ Game Cards
+
+    • 4:5 ratio, rounded, drop shadow on hover
+    • Metadata: Title, multiplier, game type (if needed)
+    • Hover interaction: scale(1.03) + box-shadow
+    • Click = start session modal
+
+ Wallet Button
+
+    • Minimal rounded pill with balance
+    • Connect/Disconnect + Tooltip on hover
+
+ Filters/Sort Tabs
+
+    • Rounded capsule tabs
+    • Active tab = bold + border
+    • Sort by: Wager amount, Popularity, Newest
+
+
+
+
+🕹 Interactions & Motion
+
+    • Card Hover: Glow + scale + outline
+    • Modal open/close: Slide or fade (200ms)
+    • Matchmaking loader: Pulse loader or rotating icon
+    • Transitions: Use Framer Motion for all state transitions
+
+
+
+
+                                                   2
+  Developer Stack Alignment
+     • TailwindCSS: Base utility framework
+     • shadcn/ui: Component library for forms, modals
+     • Next.js (frontend): Route-based + SEO friendly
+     • React Query / Zustand: Data fetching + state
+     • Framer Motion: Animations
+
+
+
+
+  Mobile UX Guidelines
+     • Stack sidebar into mobile drawer
+     • Game cards scrollable in carousel
+     • Wallet & match modals adapted to 100vh view
+
+
+
+
+  Branding Consistency
+     • Use PV3.FUN logo with controller + Solana glyph icon
+     • All modals, CTAs, and tooltips match dark mode contrast
+     • Button spacing consistent: px-4 py-2 minimum
+     • Use visual separators for Live Games, Featured Games, and Leaderboards
+
+
+
+
+  Optional Enhancements
+     • Skeleton UI while loading cards or wallet
+     • Loading shimmer on game thumbnails
+     • Featured banners or carousels with motion overlay
+
+
+
+Let me know if you’d like this exported as a PDF or Figma-ready wireframe starter.
+
+
+
+
+                                                   3
+

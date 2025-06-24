@@ -1,0 +1,41 @@
+
+> pv3-backend@1.0.0 start:dev
+> ts-node src/main.ts
+
+[32m[Nest] 57016  - [39m06/24/2025, 5:25:34 PM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 57016  - [39m06/24/2025, 5:25:34 PM [32m    LOG[39m [38;5;3m[SolanaService] [39m[32mSolana service initialized[39m
+[32m[Nest] 57016  - [39m06/24/2025, 5:25:34 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +3ms[39m
+[32m[Nest] 57016  - [39m06/24/2025, 5:25:34 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mDatabaseModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 57016  - [39m06/24/2025, 5:25:34 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mSolanaModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 57016  - [39m06/24/2025, 5:25:34 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mVerifierModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 57016  - [39m06/24/2025, 5:25:34 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mGameModule dependencies initialized[39m[38;5;3m +0ms[39m
+[31m[Nest] 57016  - [39m06/24/2025, 5:25:34 PM [31m  ERROR[39m [38;5;3m[ExceptionHandler] [39m[31mNest can't resolve dependencies of the MatchService (PrismaService, SolanaService, ?). Please make sure that the argument VerifierService at index [2] is available in the MatchModule context.
+
+Potential solutions:
+- Is MatchModule a valid NestJS module?
+- If VerifierService is a provider, is it part of the current MatchModule?
+- If VerifierService is exported from a separate @Module, is that module imported within MatchModule?
+  @Module({
+    imports: [ /* the Module containing VerifierService */ ]
+  })
+[39m
+Error: Nest can't resolve dependencies of the MatchService (PrismaService, SolanaService, ?). Please make sure that the argument VerifierService at index [2] is available in the MatchModule context.
+
+Potential solutions:
+- Is MatchModule a valid NestJS module?
+- If VerifierService is a provider, is it part of the current MatchModule?
+- If VerifierService is exported from a separate @Module, is that module imported within MatchModule?
+  @Module({
+    imports: [ /* the Module containing VerifierService */ ]
+  })
+
+    at Injector.lookupComponentInParentModules (/mnt/c/Users/patch/OneDrive/Desktop/PV3/PV3/backend/node_modules/@nestjs/core/injector/injector.js:262:19)
+    at async Injector.resolveComponentInstance (/mnt/c/Users/patch/OneDrive/Desktop/PV3/PV3/backend/node_modules/@nestjs/core/injector/injector.js:215:33)
+    at async resolveParam (/mnt/c/Users/patch/OneDrive/Desktop/PV3/PV3/backend/node_modules/@nestjs/core/injector/injector.js:129:38)
+    at async Promise.all (index 2)
+    at async Injector.resolveConstructorParams (/mnt/c/Users/patch/OneDrive/Desktop/PV3/PV3/backend/node_modules/@nestjs/core/injector/injector.js:144:27)
+    at async Injector.loadInstance (/mnt/c/Users/patch/OneDrive/Desktop/PV3/PV3/backend/node_modules/@nestjs/core/injector/injector.js:70:13)
+    at async Injector.loadProvider (/mnt/c/Users/patch/OneDrive/Desktop/PV3/PV3/backend/node_modules/@nestjs/core/injector/injector.js:98:9)
+    at async /mnt/c/Users/patch/OneDrive/Desktop/PV3/PV3/backend/node_modules/@nestjs/core/injector/instance-loader.js:56:13
+    at async Promise.all (index 3)
+    at async InstanceLoader.createInstancesOfProviders (/mnt/c/Users/patch/OneDrive/Desktop/PV3/PV3/backend/node_modules/@nestjs/core/injector/instance-loader.js:55:9)

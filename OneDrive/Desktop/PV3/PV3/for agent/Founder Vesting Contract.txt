@@ -1,0 +1,103 @@
+Founder Vesting Contract – PV3 Gaming Ltd.
+This Founder Vesting Agreement is made and entered into by and between:
+• PV3 Gaming Ltd., a BVI Business Company
+• Alex [Surname], Co-founder and Director ("Founder A")
+• Josh [Surname], Co-founder and Director ("Founder B")
+Effective Date: [Insert Date of Agreement Execution]
+
+1.
+
+Purpose
+
+To ensure long-term commitment and equitable ownership structure, the Founders agree to the
+following vesting terms for their equity shares in PV3 Gaming Ltd.
+
+2. 📈 Equity Allocations Subject to Vesting
+Founder
+
+Total Equity (%)
+
+Shares Vesting
+
+Initial Vesting
+
+Cliff Period
+
+Alex
+
+47.5%
+
+100%
+
+0%
+
+12 months
+
+Josh
+
+47.5%
+
+100%
+
+0%
+
+12 months
+
+Note: Advisor shares (Jord – 6%, Gwoppa – 2%) may be allocated separately, with optional
+milestone-based or time-based vesting under advisory agreements.
+
+3. ⏳ Vesting Schedule
+• Total Duration: 48 months (4 years)
+• Cliff: 12 months (no shares vest in first year)
+• Monthly Vesting: After cliff, shares vest 1/36th each month over the remaining 36 months
+• Acceleration: Board may approve accelerated vesting under acquisition, death, or incapacity
+
+4.
+
+Forfeiture
+• If a Founder voluntarily resigns or is terminated for cause before full vesting, all unvested
+shares are forfeited back to the company treasury.
+• If termination is without cause, pro-rata vested shares are retained by Founder.
+
+5.
+
+Restrictions
+• Founders may not sell or transfer any shares until fully vested, unless:
+• Approved by the board of directors
+• Right of First Refusal (ROFR) is observed by existing shareholders
+
+1
+
+6.
+
+IP Assignment (Reference)
+
+Founders acknowledge that all intellectual property, software, designs, game logic, or brand
+contributions made during vesting period are the sole property of PV3 Gaming Ltd.
+
+7.
+
+Governing Law
+• This agreement is governed by the laws of the British Virgin Islands.
+• Disputes will be handled under arbitration, as per shareholder agreement terms.
+
+✍ Signatures
+By signing below, the parties agree to the terms outlined in this Founder Vesting Contract:
+Party
+
+Signature
+
+Date
+
+Alex
+Josh
+PV3 Ltd.
+
+(Director)
+
+Let me know if you'd like an Advisory Vesting Addendum for Jord or Gwoppa based on contribution
+milestones or time-based vesting.
+
+2
+
+

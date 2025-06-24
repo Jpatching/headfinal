@@ -1,0 +1,61 @@
+# Ignore everything except WebGL build
+*
+!WebGL-Build/
+!WebGL-Build/**
+!vercel.json
+!package.json
+!index.html
+
+# Unity specific ignores
+Assets/
+Library/
+Logs/
+Packages/
+ProjectSettings/
+UserSettings/
+Temp/
+obj/
+Build/
+*.tmp
+*.temp
+*.log
+*.meta
+*.unity
+*.prefab
+*.mat
+*.asset
+*.controller
+*.anim
+*.cs
+*.dll
+*.pdb
+*.mdb
+*.exe
+*.app
+*.apk
+*.ipa
+
+# OS specific
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.opendb
+*.VC.db
+
+# Git
+.git/
+.gitignore
+.gitattributes 

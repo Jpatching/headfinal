@@ -1,0 +1,91 @@
+Game Developer Agreement – PV3 Gaming Ltd.
+This Agreement is entered into between:
+• PV3 Gaming Ltd., a BVI Business Company ("Platform")
+• [Developer Name], an independent game developer or development studio ("Developer")
+Effective Date: [Insert Date]
+
+1. 🎮 Purpose
+This Agreement governs the submission, integration, and ongoing support of one or more 1v1 skillbased games on the PV3 platform, currently operated under the name "PV3 Gaming."
+
+2.
+
+Intellectual Property
+
+2.1. Ownership & Assignment
+• All code, assets, logic, and gameplay submitted by Developer will remain Developer's intellectual
+property until it is formally integrated into PV3.
+• Upon acceptance and reward/payment by PV3, the game and its assets become the exclusive
+property of PV3 Gaming Ltd. (unless otherwise negotiated).
+
+2.2. License (Pre-Acceptance)
+• Developer grants PV3 a temporary, revocable license to test, audit, and evaluate the game.
+
+3. 📦 Submission Guidelines
+• Game must be compatible with PV3's SDK
+• Game must support server-to-server or WebSocket verification of winner (no client-side trust)
+• Required metadata:
+• Game name, version
+• Asset size
+• Supported wager amounts
+• Game ID
+• Scoring logic
+• Minimum one replay/demo file for fairness review
+
+1
+
+4.
+
+Fairness & Exploit Mitigation
+• Developer agrees not to implement hidden RNG, hidden frame bias, or pattern matching
+• Developer must notify PV3 of any discovered exploits or unintended win paths
+• PV3 reserves the right to suspend or de-list any game found to be exploitable
+
+5. 💰 Compensation & Revenue
+5.1. Buyout Model
+If PV3 fully buys out the game: - PV3 pays a one-time fee (negotiated case-by-case) - PV3 owns 100% of
+the IP thereafter
+
+5.2. Rev-Share Model (Optional Future Phase)
+• If revenue-sharing is chosen:
+• Developer receives X% of total fees collected on their game
+• Paid monthly to verified Solana wallet
+
+6. ⛓ Ongoing Maintenance
+• Developer agrees to fix bugs or provide a patch within 72 hours if critical issues arise postdeployment
+• PV3 may suspend or temporarily disable a game that fails to maintain fairness or uptime
+
+7. 🔒 Confidentiality
+Developer agrees not to share PV3's SDK, internal logic, dashboard tools, or infrastructure schemas
+without written permission
+
+8.
+
+Legal
+• Developer acts as an independent contractor, not an employee
+• This agreement is governed by the laws of the British Virgin Islands
+• Any disputes shall be resolved via arbitration in BVI
+
+✍ Signatures
+Party
+
+Signature
+
+PV3 Gaming Ltd.
+
+2
+
+Date
+
+Party
+
+Signature
+
+Date
+
+[Developer Name]
+
+Let me know if you'd like a simplified onboarding version or a whitelist-only variant for internal devs.
+
+3
+
+

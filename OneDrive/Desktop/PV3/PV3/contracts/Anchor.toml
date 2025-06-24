@@ -1,0 +1,24 @@
+[features]
+seeds = false
+skip-lint = false
+
+[programs.mainnet]
+pv3 = "51mQPjsgLs5XpPMmtux9jmTaRqbsi36jKoDGADfjzbDs"
+
+[programs.devnet]
+pv3 = "51mQPjsgLs5XpPMmtux9jmTaRqbsi36jKoDGADfjzbDs"
+
+[registry]
+url = "https://api.apr.dev"
+
+[provider]
+cluster = "mainnet"
+wallet = "~/.config/solana/id.json"
+
+[scripts]
+test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts --timeout 60000"
+deploy-mainnet = "anchor deploy --program-name pv3 --provider.cluster mainnet"
+deploy-devnet = "anchor deploy --program-name pv3 --provider.cluster devnet"
+
+[toolchain]
+anchor_version = "0.31.1" 

@@ -1,0 +1,91 @@
+PV3 Security Architecture FAQ
+Last Updated: [Insert Date]
+This document explains how PV3 is designed to be fundamentally resistant to hacking, exploits, and
+mass-drain scenarios. It serves as a formal overview for security reviews, audit partners, legal counsel,
+and investor due diligence.
+
+Are User Funds Safe on PV3?
+Yes. PV3 uses a non-custodial hybrid vault model where: - Users deposit into their own Program
+Derived Address (PDA) - Vaults are locked to their wallet and isolated from others - No backend or
+platform admin can move user funds arbitrarily
+
+What Are PDAs and Why Are They Safe?
+PDAs (Program Derived Addresses): - Are deterministic Solana addresses owned by a smart contract, not
+a private key - Can only be controlled by the specific program that created them - Cannot be bruteforced or taken over — there is no private key to steal
+Bottom line: PDAs are the backbone of non-custodial Solana DeFi security.
+
+🔒 Can Someone Drain Multiple Vaults?
+No. Vaults are single-user scoped. Each PDA: - Belongs to one wallet only - Can’t be accessed by another
+user or hacker - Doesn’t expose its keys (because none exist)
+Even if a frontend or backend is compromised, vault funds are still safe.
+
+🕹 What About Game Result Exploits?
+Match payouts only occur when: - A signed result is submitted by the Verifier Service - This service runs
+on a backend controlled by the PV3 team - Each match result is hashed, signed, and validated before
+payout
+⚠ Clients cannot spoof wins. All games must go through verification.
+
+1
+
+🛠 What If a Vault Becomes Inactive?
+Failsafe protections include: - A 2-of-3 multisig can act if a vault is idle for 48+ hours - Only limited
+actions (withdrawals to rightful owners, stuck match resolution) are possible - All actions are logged onchain and auditable
+
+🔍 What Is the Risk of a Smart Contract Bug?
+• All contracts will undergo independent third-party audit (e.g., OtterSec, Zellic, Sec3)
+• Fuzzing, simulation, and bug bounty will follow audit
+• The code is modular and simple — no complex reentrancy or flash-loan risk
+
+Can Platform Admins Steal Funds?
+No. - The platform never holds your funds - Admins cannot drain vaults or execute payouts - Multisig
+actions are heavily restricted and visible to all users
+
+What If a Match Is Interrupted?
+• Matches have a timeout feature to auto-refund
+• Partial or fake matches do not result in any payout
+• Edge cases are handled securely with clear on-chain logic
+
+📦 Summary
+Attack Vector
+
+Outcome
+
+Frontend compromise
+
+Funds safe in PDAs
+
+Backend compromised
+
+No access to vaults
+
+Smart contract bug
+
+Prevented via audit
+
+Admin rugpull
+
+Blocked by program logic
+
+Fake match win attempt
+
+Rejected by verifier
+
+Vault ID spoofing
+
+Impossible on Solana
+
+Why PV3 Is Safer Than Custodial Platforms
+• No pooled hot wallet risk
+• No backend-controlled fund storage
+• Everything is transparent, permissioned, and auditable
+
+2
+
+• Uses Solana's best-practice security primitives
+
+For more information, see the [Security Policy & Audit Roadmap] or contact us for audit details and
+protocol documentation.
+
+3
+
+

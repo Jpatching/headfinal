@@ -1,0 +1,126 @@
+PV3 Platform – README.md
+Overview
+PV3 is a next-gen Solana-based 1v1 crypto gaming platform. Players compete in skill-based games (e.g.,
+sports, arcade, FPS) for real SOL wagers. The winner takes the pot (minus a 6.5% platform fee). No
+house games. No luck-based outcomes. 100% PvP skill.
+
+🏗 Architecture
+Directory Structure:
+
+root/
+├─ contracts/
+
+# Solana Anchor programs
+
+├─ backend/
+
+# NestJS API + WebSocket
+
+├─ games/
+
+# HTML5 + Unity game projects
+
+├─ frontend/
+
+# React frontend
+
+├─ verifier/
+
+# Signature signer microservice
+
+├─ prisma/
+
+# DB schema + migration
+
+├─ dev/
+
+# Game SDK + internal-only onboarding logic
+
+└─ docs/
+
+# Whitepapers, licenses, audit plans
+
+⚙ Platform Flow
+1. User connects wallet (Phantom, Backpack, etc.)
+2. Deposits SOL into a session PDA vault (non-custodial)
+3. Selects game + stake
+4. Matchmaking via WebSocket server
+5. Game played (React or Unity)
+6. Backend verifies outcome
+7. Smart contract distributes SOL to winner, takes 6.5% fee
+8. User withdraws unused balance anytime
+
+Hybrid Vault Escrow System
+• Funds go into per-user PDAs (non-custodial vaults)
+• Smooth UX: users only sign once per session
+• All match payouts happen on-chain via smart contract
+
+1
+
+Admin Failsafe Multisig
+• 2-of-3 signer mechanism for:
+• Vault recovery (e.g. inactivity > 48h)
+• Emergency pause in event of exploit
+• Publicly logged and limited via contract conditions
+Members: - Alex (CEO), Josh (CTO), DAO/Legal Signer
+
+Fee Breakdown
+• 6.5% platform fee on all wagers
+• 1% funds referral rewards
+• 5.5% sustains platform and treasury
+
+Unique Selling Points
+• All games are PvP skill-based
+• Web3-native, but feels Web2-fast (no wallet spam)
+• Unity-based games for premium gameplay
+• Future DAO, token rewards, and whitelist-only dev submission
+
+📥 Game Submission (Whitelisted Devs Only)
+• Submit via dev/submit.js CLI or frontend dashboard (v2)
+• Games must:
+• Follow SDK standard
+• Sign results
+• Be server-authoritative
+• Audited before going live
+
+📊 Admin Tools
+• Manual match override (e.g., timeout)
+• Vault inactivity sweeper
+• Game health analytics (Win %, DAU, SOL wagered)
+
+📈 Versioning
+• All smart contracts semver'd and tagged
+• Game SDK follows independent changelog
+
+2
+
+🔒 Fairness
+• All games validated server-side
+• Smart contract escrows, never user balances
+• Dispute process + match log review
+
+Financials (See whitepaper for full model)
+• Conservative: 5–10% of pump.fun = ~$1M–$2M annual rev
+• Realistic: 25–50% of pump.fun = ~$5M–$10M
+• Explosive: 100%+ = $20M+
+Net profit: ~35–50% margins due to lean in-house dev
+
+Legal Structure
+• Entity: PV3 Gaming Ltd (BVI)
+• Directors: Alex (CEO), Josh (CTO)
+• No custody, SOL held in vaults (non-custodial)
+• Read: /docs/Pv3 Bvi Company Structure.md
+
+dev/ Folder
+• Contains:
+• SDK for submitting games
+• Game metadata templates
+• Internal-only onboarding logic (CLI, game registry, keys)
+
+TODO.md
+See /docs/TODO.md for planned modules and rollouts.
+Let me know if you’d like CLI flags for dev submissions or to expand the SDK to auto-wrap Unity builds.
+
+3
+
+

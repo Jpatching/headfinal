@@ -1,0 +1,15 @@
+[package]
+name = "pv3"
+version = "0.1.0"
+description = "PV3 Gaming Platform Smart Contracts"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[features]
+no-entrypoint = []
+cpi = ["no-entrypoint"]
+
+[dependencies]
+anchor-lang = "0.31.1" 

@@ -1,0 +1,390 @@
+🎮 PV3 - Full Technical & Operational Whitepaper
+Platform Overview
+PV3 is a non-custodial, Solana-based 1v1 skill gaming platform. All matches are powered by smart
+contracts and verified outcomes. Players wager SOL, compete, and the winner takes the pot minus a
+6.5% platform fee.
+Built for: - Competitive PvP gameplay - Verifiable on-chain outcomes - Fair rewards and community trust
+
+Core Platform Logic
+Match Lifecycle (WebSocket Flow + Solana)
+1. Player A initiates match → deposit SOL → createMatch() on Solana
+2. Player B joins → match escrow initialized (PDA per match)
+3. Match begins via WebSocket → both clients sync
+4. Game finishes → Verifier microservice signs result payload
+5. Signature submitted to Solana → submitResult() → winner paid
+6. Timeout condition → contract checks expiry and refunds
+
+⛓ Escrow Design (Per-Match Isolation)
+• Every match uses a PDA vault
+• Ensures no global funds are at risk
+• Immutable match data structure: creator, joiner, wager, expiry, gameId
+
+Verifier Service
+• Off-chain signer that issues a valid ed25519 signature on the winner's outcome
+• Matches are invalid unless signature is confirmed on-chain
+• Centralized for now, but logs every match hash for auditability
+
+Game Modularity + SDK
+Internal Games
+• Built in React + WebSocket + HTML5 DOM rendering
+• Each game implements a deterministic loop and movement log
+• Signature generated off client-side game data + server-side validation
+
+External Games (Whitelist Future)
+• Developers submit via dev/ SDK tools:
+
+1
+
+• game_metadata.json
+• Game logic + client files
+• Result verifier code
+• Each submission is reviewed internally
+• Approved games are added to on-chain registry
+Game Metadata Example:
+
+{
+"id": "chess_blitz",
+"min_bet": 0.01,
+"max_bet": 1.0,
+"verifier": "verifier_chess_blitz",
+"version": "1.0.0"
+}
+
+Rewards & Referrals
+Fee Split
+• 6.5% platform fee
+• 5.5% to platform treasury
+• 1% to referral/reward pool
+
+Referral System
+• Track referrals by unique code per wallet
+• Backend distributes share of 1% fee to referring users
+• Claims handled via frontend claim portal
+
+🪙 Tokenomics (Future Phase)
+• $PV3 Token: 1,000,000,000 total supply (locked at launch)
+• Future utility: boost rewards, DAO voting, sponsor tournaments
+• Treasury wallet receives partial allocations once token launched
+DAO Integration: - Post-token launch → snapshot-style governance - Community votes on game
+additions, fee changes, partnerships
+
+Game Fairness & Anti-Cheat
+Match Trust Model
+• All matches are player-vs-player only (no bots)
+• Each player client logs:
+• Position frames (x, y)
+
+2
+
+• Match timer checkpoints
+• Final action state
+
+Verification System
+• Game logic is deterministic → same input = same result
+• Verifier service signs result hash → verified on-chain
+• No payout occurs unless signed match result is posted
+
+Anti-Cheat Policies
+• Timeout system refunds disconnected or inactive matches
+• Admin tools allow blacklisting abusive wallets
+• Optional game replay logs for internal analysis
+
+🛠 Admin Tools
+• Admin panel:
+• Force payout, refund, or nullify
+• Match history + real-time view
+• Ban wallet, freeze game
+• All admin actions logged with timestamp + signer key
+
+📈 Analytics Dashboard (MVP Phase)
+Tracks: - Total volume - Number of matches per day - Number of active players - Wager sizes by tier Referral rewards distributed
+
+Versioning & Deployment
+• Contracts: versioned via tags (v1.0, v1.1…)
+• Backend: tag by deployment ( /api/v1 , /api/v2 )
+• Frontend: /v1 , /v2 URLs supported
+• All releases are documented in /docs/CHANGELOG.md
+
+Legal Structure
+• Registered in British Virgin Islands (BVI)
+• Operates under skill-based platform jurisdiction
+• Geo-restricted from UK
+• Smart contract handles funds – platform never takes custody
+
+3
+
+💰 Financial Projections
+Assumptions: - SOL average price: $170 - Minimum bet: 0.1 SOL, max: 10 SOL - Allowed wagers: 0.1, 0.2,
+0.3, 0.5, 1, 2, 3, 4, 5, 10 SOL - Average user stakes ~$14/game (≈ 0.082 SOL @ $170) - Match fee: 6.5%,
+of which 1% fuels referral rewards
+Users
+(DAU)
+
+Matches/
+Day
+
+Avg Bet
+(SOL)
+
+Daily Volume
+(SOL)
+
+Daily Revenue
+(SOL)
+
+Monthly Revenue
+(USD)
+
+100
+
+300
+
+0.082
+
+24.6 SOL
+
+1.599 SOL
+
+$8,137
+
+500
+
+1,500
+
+0.082
+
+123.0 SOL
+
+7.995 SOL
+
+$40,687
+
+1,000
+
+3,000
+
+0.082
+
+246.0 SOL
+
+15.99 SOL
+
+$81,375
+
+5,000
+
+15,000
+
+0.082
+
+1,230 SOL
+
+79.95 SOL
+
+$406,875
+
+10,000
+
+30,000
+
+0.082
+
+2,460 SOL
+
+159.9 SOL
+
+$813,690
+
+30,000
+
+90,000
+
+0.082
+
+7,380 SOL
+
+479.7 SOL
+
+$2,441,070
+
+50,000
+
+150,000
+
+0.082
+
+12,300 SOL
+
+799.5 SOL
+
+$4,068,450
+
+Note: These projections assume healthy platform engagement and gradual user growth.
+Platform is bootstrapped — founders incur no third-party development costs.
+
+📈 Pump.fun Benchmark Comparison
+Pump.fun Growth Overview:
+• Reached over 100,000 DAU in under 6 months
+• Estimated platform fees exceed $1.5M/month in peak months
+• Heavy usage from degen/retail due to simplicity, virality, and low fees
+
+If PV3 Mirrors Pump.fun Trajectory:
+Assumptions: - PV3 reaches 50,000–100,000 DAU over 6–12 months - Average game stake remains $14
+(≈ 0.082 SOL) - Similar viral growth pattern from competitive, fun, real-money gameplay
+Growth Scenario
+
+DAU
+
+Matches/Day
+
+Daily Revenue (SOL)
+
+Monthly Revenue (USD)
+
+10% Pump Scale
+
+10,000
+
+30,000
+
+159.9 SOL
+
+$813,690
+
+20% Pump Scale
+
+20,000
+
+60,000
+
+319.8 SOL
+
+$1,627,380
+
+50% Pump Scale
+
+50,000
+
+150,000
+
+799.5 SOL
+
+$4,068,450
+
+100% Pump Scale
+
+100,000
+
+300,000
+
+1,599 SOL
+
+$8,136,900
+
+These figures illustrate PV3's potential as the top competitive 1v1 gaming DApp on
+Solana, should it match or exceed the viral and product-led growth seen by pump.fun.
+|-------------|-------------|----------------|---------------------|----------------------|-------------------------|
+|
+10,000 | 30,000 | 0.082 | 2,460 SOL | 159.9 SOL | $813,690 | | 30,000 | 90,000 | 0.082 |
+
+4
+
+7,380 SOL | 479.7 SOL | $2,441,070 | | 50,000 | 150,000 | 0.082 | 12,300 SOL | 799.5 SOL
+| $4,068,450 |
+Note: These projections assume healthy platform engagement and gradual user growth.
+Platform is bootstrapped — founders incur no third-party development costs. 150,000 |
+0.05 SOL | 7,500 SOL | 487.5 SOL | $73,125/month |
+Founders build in-house. No contractor costs assumed.
+
+Unique Selling Points
+• Non-custodial SOL wagering (match-based PDAs)
+• 1% of fees returned to community referrals
+• HTML5 and Unity support
+• Anti-cheat enforced by signature verification
+• Future roadmap to $PV3 token and DAO
+
+Security / Audit Plan
+• MVP: Internal audit + stress test
+• Post-MVP: Formal audit (Sec3 / OtterSec / Zokyo)
+• No production deployment without test coverage + gas limit simulation
+
+Current Coverage Summary
+Area
+
+Status
+
+Platform logic (escrow, rewards, payouts)
+
+Complete
+
+Game modularity + SDK plan
+
+Complete
+
+Referral system (1%)
+
+Complete
+
+Tokenomics + future DAO
+
+Complete
+
+Financial projections
+
+Complete
+
+Legal structure + no-custody model
+
+Complete
+
+Unity roadmap
+
+Complete
+
+USP / branding / goals
+
+Complete
+
+Competitive landscape
+
+Complete
+
+Developer onboarding (dev/)
+
+Complete
+
+Game Submission Process (whitelisted devs)
+
+Documented
+
+Admin Tools Overview
+
+Documented
+
+5
+
+Area
+
+Status
+
+Analytics Dashboard
+
+Specified
+
+Versioning + Release Schedule
+
+Included
+
+Game Fairness + Anti-Cheat
+
+Complete
+
+Audit Plan
+
+Listed
+
+Let’s build PV3 into the best competitive gaming DApp on Solana.
+
+6
+
+

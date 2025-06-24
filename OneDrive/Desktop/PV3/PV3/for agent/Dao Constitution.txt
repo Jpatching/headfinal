@@ -1,0 +1,95 @@
+PV3 DAO Constitution
+This constitution defines the operational framework, governance model, and responsibilities of the PV3
+DAO, which governs token-powered decisions within the PV3 Gaming ecosystem.
+
+1. 🏛 Purpose of the DAO
+The PV3 DAO exists to decentralize decision-making related to: - Game onboarding and approval Treasury usage and grants - Feature requests and roadmap prioritization - Community incentives and
+reward structures
+The DAO does not control corporate operations of PV3 Gaming Ltd. but governs the
+tokenized layer of the ecosystem.
+
+2. 🪙 Eligibility & Voting Power
+• DAO Members are holders of the $PV3 token
+• Each token equals 1 vote (snapshot voting)
+• Voting is non-transferable during active proposals (to prevent manipulation)
+• Minimum 10,000 $PV3 required to submit a proposal
+
+3. 📥 Proposal Lifecycle
+3.1. Stages
+1. Discussion: Proposed on PV3 forums or Discord
+2. Draft Submission: Using template format
+3. Snapshot Vote: Voting period (typically 3–7 days)
+4. Execution: On-chain if passed
+
+3.2. Voting Thresholds
+Proposal Type
+
+Quorum
+
+Approval Needed
+
+Basic DAO Motion
+
+5%
+
+50%+
+
+Treasury Spending
+
+10%
+
+60%
+
+Game Onboarding
+
+5%
+
+50%
+
+Emergency Actions
+
+15%
+
+70%
+
+1
+
+4. 💰 Treasury
+• The DAO controls a portion of platform revenue (via $PV3 allocation or fee-share)
+• Funds may be distributed to:
+• Incentives for top players
+• Bounties for dev contributions
+• Marketing pushes or events
+• DAO must maintain minimum reserves of 10% treasury value
+
+5. Governance Safeguards
+• Multi-sig signers include trusted community members and founders (transitioning fully
+decentralized post-year 2)
+• Emergency veto possible by PV3 founders only in Year 1
+• Any smart contract change must be audited before deployment
+
+6. 🌍 Transparency & Auditing
+• All proposals and votes are logged on-chain
+• Treasury balance is publicly viewable
+• Annual audit of DAO finances conducted by a third party
+
+7. Amendment Process
+• This Constitution may be amended by:
+• 15% quorum
+• 66% supermajority vote
+
+Definitions
+• Snapshot: Off-chain governance voting tool
+• Proposal: A formal request for DAO action
+• Quorum: Minimum % of total supply voting
+
+Long-Term Vision
+• Transition DAO to full treasury control by Year 3
+• Empower player communities to fund new game types
+• Experiment with decentralized game rating + ranking boards
+
+Let me know if you’d like to add a treasury incentive breakdown or voter reputation system design.
+
+2
+
+

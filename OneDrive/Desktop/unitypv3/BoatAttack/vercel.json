@@ -1,0 +1,78 @@
+{
+  "version": 2,
+  "name": "boatattack-racing",
+  "builds": [
+    {
+      "src": "BoatAttack/WebGL-Build/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/",
+      "dest": "/BoatAttack/WebGL-Build/index.html"
+    },
+    {
+      "src": "/BoatAttack/WebGL-Build/(.*)",
+      "dest": "/BoatAttack/WebGL-Build/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/BoatAttack/WebGL-Build/$1"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*\\.wasm)",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/wasm"
+        },
+        {
+          "key": "Content-Encoding",
+          "value": "gzip"
+        }
+      ]
+    },
+    {
+      "source": "/(.*\\.data\\.gz)",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/octet-stream"
+        },
+        {
+          "key": "Content-Encoding",
+          "value": "gzip"
+        }
+      ]
+    },
+    {
+      "source": "/(.*\\.js\\.gz)",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/javascript"
+        },
+        {
+          "key": "Content-Encoding",
+          "value": "gzip"
+        }
+      ]
+    },
+    {
+      "source": "/(.*\\.symbols\\.json\\.gz)",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "key": "Content-Encoding",
+          "value": "gzip"
+        }
+      ]
+    }
+  ]
+} 

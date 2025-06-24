@@ -1,0 +1,127 @@
+Shareholder Agreement Template – PV3
+Gaming Ltd.
+This Shareholder Agreement is made on this day between the following parties:
+• Alex [Surname], of the United Kingdom ("Shareholder A")
+• Josh [Surname], of the United Kingdom ("Shareholder B")
+• Jord [Surname], of the United Kingdom ("Shareholder C")
+• Gwoppa [Surname], of the United Kingdom ("Shareholder D")
+Collectively referred to as the "Shareholders."
+
+1.
+
+Company Overview
+• Entity: PV3 Gaming Ltd.
+• Incorporated in: British Virgin Islands (BVI)
+• Nature of Business: Non-custodial, skill-based Web3 gaming platform
+• Registration: [Insert official BVI registration number upon incorporation]
+
+2.
+
+Share Capital & Ownership
+Shareholder
+
+Role
+
+Shares (%)
+
+Alex
+
+Director/CEO
+
+47.5%
+
+Josh
+
+Director/CTO
+
+47.5%
+
+Jord
+
+Advisor
+
+6.0%
+
+Gwoppa
+
+Advisor
+
+2.0%
+
+2.1 Issuance of Shares
+• All shares issued as common stock, equal in voting and dividend rights.
+• Preferred shares may be created in future investor rounds upon unanimous director approval.
+
+3.
+
+Voting Rights
+• Each Shareholder holds one vote per share.
+• Major decisions (e.g. dissolution, major asset sale, or external investment) require approval by at
+least 75% of shares.
+
+4.
+
+Dividends
+• The Board of Directors may declare dividends annually from distributable profits.
+• Dividends will be proportionally paid according to the shareholder equity table.
+
+1
+
+5.
+
+Transfer of Shares
+• Shares may not be sold, pledged, or otherwise transferred without:
+• Written approval from a majority of Directors
+• Right of First Refusal (ROFR) to existing shareholders
+
+6.
+
+Founder Commitments
+• Alex and Josh agree to assign all intellectual property and contributions to PV3 Gaming Ltd.
+• Founders agree not to work on competing projects without written approval from the board.
+
+7. ⛓ Vesting (if applicable)
+Optional clause if equity is subject to vesting (otherwise see separate contract):
+Shares issued to founders/advisors may be subject to a 4-year vesting schedule with a 1year cliff, as determined by board vote.
+
+8.
+
+Exit & Drag-Along Rights
+• In the event of a full sale of the company:
+• Minority shareholders agree to sell their shares on the same terms as majority shareholders.
+
+9.
+
+Dispute Resolution
+• All disputes shall first be mediated informally.
+• If unresolved, disputes shall be referred to arbitration in a neutral offshore jurisdiction (e.g.
+Singapore or BVI).
+
+10.
+
+Amendment
+• This Agreement may only be amended with written approval of shareholders holding at least
+75% of issued shares.
+
+✍ Signatures
+By signing below, each Shareholder acknowledges that they have read, understood, and agree to the
+terms of this Agreement.
+Shareholder
+
+Signature
+
+Alex
+Josh
+Jord
+Gwoppa
+
+2
+
+Date
+
+Let me know if you'd like this legally reviewed or signed via DocuSign/Notion with timestamps and
+attached ID/KYC documentation.
+
+3
+
+

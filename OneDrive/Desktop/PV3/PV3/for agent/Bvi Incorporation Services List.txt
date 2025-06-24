@@ -1,0 +1,83 @@
+White-Label BVI Incorporation Services List
+This list outlines trusted service providers to help incorporate PV3 Gaming Ltd. in the British Virgin
+Islands (BVI), including formation, nominee services, registered agents, and ongoing compliance
+support.
+
+🏝 Tier 1: Full-Service BVI Law Firms
+These providers offer legal setup, tax consultation, and high-tier compliance documentation.
+
+1. Harneys
+• Website: https://www.harneys.com
+• Services: Incorporation, legal advisory, IP protection, fund/token structure
+• Recommended for: High-growth startups, investor-backed projects
+
+2. Ogier
+• Website: https://www.ogier.com
+• Services: Crypto-focused BVI setup, legal counsel, KYC/KYB, nominee directors
+• Notable: Strong experience with DAOs and DeFi entities
+
+Tier 2: Incorporation Specialists / Agents
+Ideal for fast, affordable, no-frills BVI companies. Usually includes registered office + annual fees.
+
+3. SFM Corporate Services
+• Website: https://www.sfm.com
+• Services: Offshore incorporation, nominee director/shareholder services, document notarization
+• Cost: ~$1,100 setup + ~$850/year maintenance
+
+4. BVI Company Incorporation (BVI Company Experts)
+• Website: https://www.bvicompanyincorporation.com
+• Services: Basic incorporation + legal docs, optional extras (Apostille, courier)
+• Quick setup, responsive support
+
+Tier 3: Tech-Friendly & Web3-Aligned
+These options are ideal for crypto-native teams and offer integrations with multi-sig wallets, DAOs, and
+token planning.
+
+1
+
+5. Token Launch Law / AssetVault
+• Website: https://tokenlaunchlaw.com
+• Crypto-native legal setup for token projects
+• DAO and utility token structuring packages
+• Customized white-label support
+
+6. KoreChain / KoreConX (BVI Division)
+• Website: https://www.koreconx.com
+• Platform for regulated token issuers, cap table management
+• Offers smart contract integration advice for BVI DAOs
+
+Typical BVI Incorporation Requirements
+Item
+
+Notes
+
+Director ID + Passport
+
+For Alex & Josh
+
+Proof of Address
+
+Utility bill or bank statement (within 3 months)
+
+Registered Agent
+
+Required annually
+
+Registered Office in BVI
+
+Handled by service provider
+
+Annual Fee
+
+~$850 to $1,500 depending on provider
+
+Next Steps
+Once a provider is selected: 1. Submit required documents (ID, proof of address) 2. Select share
+allocations and structure (as outlined in cap table) 3. Sign incorporation forms 4. Receive incorporation
+certificate + BVI company number 5. Open crypto-friendly bank account (optional)
+Let me know if you’d like: - A comparison table of costs and response time - Help drafting the
+incorporation application - Direct introductions to preferred legal teams
+
+2
+
+

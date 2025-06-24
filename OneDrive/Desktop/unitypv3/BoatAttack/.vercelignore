@@ -1,0 +1,54 @@
+# Unity project files
+BoatAttack/Library/
+BoatAttack/Logs/
+BoatAttack/Packages/
+BoatAttack/ProjectSettings/
+BoatAttack/UserSettings/
+BoatAttack/Temp/
+BoatAttack/obj/
+BoatAttack/Build/
+BoatAttack/Builds/
+
+# Unity assets (keep only WebGL build)
+BoatAttack/Assets/
+BoatAttack/*.unity
+BoatAttack/*.meta
+
+# Version control
+.git/
+.gitignore
+
+# IDE files
+.vscode/
+.idea/
+*.sln
+*.csproj
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Other projects
+Multiplayer-FPS/
+pv3-gaming-platform/
+
+# Keep only the WebGL build
+!BoatAttack/WebGL-Build/
+
+# Unity artifacts
+*.meta
+*.unity
+*.prefab
+*.asset
+*.mat
+*.cs
+*.shader
+*.cginc
+*.hlsl
+
+# System files
+*.tmp
+*.log
+
+# Only include WebGL build
+!vercel.json 
